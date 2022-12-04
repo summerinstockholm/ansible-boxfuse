@@ -44,39 +44,23 @@
   hosts: production-host
   become: yes
 
-  tasks:
-  - name: Ensure wget is present
-    apt:
-     name: wget
-     state: present
-     update_cache: yes
-
-  - name: Ensure default-jdk is present
+  tasks: 
+  - name: Ensure OpenJDK is present
     apt:
      name: default-jdk
      state: present
+     update_cache: yes
 
-  - name: Create directory /usr/local/tomcat
-    file:
-     path: /usr/local/tomcat
-     state: directory
-
-  - name: Download Tomcat 9 from official site
-    shell: wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.69/bin/apache-tomcat-9.0.69.tar.gz -O /tmp/tomcat.tar.gz
-  
-  - name: Extract archive
-    shell: tar xvfz tomcat.tar.gz
-    args:
-     chdir: /tmp
-
-  - name: Copy Apache Tomcat 9 into /usr/local/tomcat/
-    shell: cp -Rv /tmp/apache-tomcat-9.0.69/* /usr/local/tomcat/
+  - name: Ensure tomcat is present
+    apt:
+     name: tomcat9
+     state: present
 
   - name: Ensure tomcat service is running
     service:
-     name: tomcat 9
+     name: tomcat9
      state: started
-
+  
 - name: Deploy Java artefact
   hosts: production-host
   become: yes
