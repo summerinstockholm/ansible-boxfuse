@@ -1,0 +1,27 @@
+# Установить дефолт-ждк и мавен на сборочный хост
+# Склонировать с гита репо и собрать джава приложение, получив артефакт на сборочном хосте 
+# Установить томкат на продакшен хост 
+# Скопировать артефакт на продакшен хост
+---
+- name: Install Maven
+  hosts: build-host
+  become: yes
+
+  tasks:
+  - name: Ensure OpenJDK is present
+    apt:
+     name: default-jdk
+     state: present
+     update_cache: true
+
+  - name: Ensure Maven is present
+    apt:
+     name: maven
+     state: present
+     
+  - name: Ensure Git is present
+    apt:
+     name: git
+     state: present
+
+  - name: 
