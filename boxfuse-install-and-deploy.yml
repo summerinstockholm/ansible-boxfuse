@@ -51,9 +51,9 @@
      state: present
      update_cache: yes
 
-  - name: Ensure openjdk11 is present
+  - name: Ensure default-jdk is present
     apt:
-     name: openjdk11
+     name: default-jdk
      state: present
 
   - name: Create directory /usr/local/tomcat
