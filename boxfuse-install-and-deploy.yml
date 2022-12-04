@@ -55,7 +55,7 @@
     apt:
      name: openjdk11
      state: present
-     
+
   - name: Create directory /usr/local/tomcat
     file:
      path: /usr/local/tomcat
@@ -77,4 +77,14 @@
      name: tomcat 9
      state: started
 
+- name: Deploy Java artefact
+  hosts: production-host
+  become: yes
+  
+  tasks:
+  - name: Copy war file to production-host
+    synchronize:
+     src: /tmp/boxfuse-sample-java-war-hello/target/hello-1.0.war
+     dest: /var/lib/tomcat9/webapps/hello-1.0.war
+    delegate_to: host2
   
