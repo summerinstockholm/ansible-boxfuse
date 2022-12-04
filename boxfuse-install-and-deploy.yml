@@ -3,7 +3,7 @@
 # Установить томкат на продакшен хост 
 # Скопировать артефакт на продакшен хост
 ---
-- name: Install Maven
+- name: Install Maven and Git
   hosts: build-host
   become: yes
 
@@ -12,7 +12,7 @@
     apt:
      name: default-jdk
      state: present
-     update_cache: true
+     update_cache: yes
 
   - name: Ensure Maven is present
     apt:
@@ -24,4 +24,32 @@
      name: git
      state: present
 
-  - name: 
+- name: Build Java app 
+  hosts: build-host
+  become: yes
+
+  tasks:
+  - name: Clone Java app from GitHub
+    git:
+     repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello
+     clone: yes
+     dest: /tmp/boxfuse-sample-java-war-hello
+  
+  - name: Build Java app
+    shell: mvn package
+    args:
+     chdir: /tmp/boxfuse-sample-java-war-hello
+  
+- name: Install Tomcat
+  hosts: production-host
+  become: yes
+
+  tasks:
+  - name: Ensure wget is present
+    apt:
+     name: wget
+     state: present
+     update_cache: yes
+
+  - name: Download Tomcat 9
+    shell: 
